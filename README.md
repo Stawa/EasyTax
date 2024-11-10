@@ -1,21 +1,45 @@
+# EasyTax Development Checklist
+
+## Authentication & User Management
+
 - [ ] Login
 - [ ] Register
 - [ ] Forgot Password
 - [ ] Reset Password
 
+## Core Features
+
 - [ ] Services
-- [ ] Calculator
-- [ ] Calendar
-- [ ] Note
+- [ ] Tax Calculator
+- [ ] Tax Calendar
+- [ ] Notes & Reminders
 
-- [ ] Profile
-- [ ] Settings
-- [ ] Dashboard
+## User Experience
 
-- [x] Main Page
+- [ ] User Profile
+- [ ] Account Settings
+- [ ] User Dashboard
+
+## Public Pages ✅
+
+- [x] Landing Page
 - [x] About Us
 - [x] Contact Us
-- [ ] Footer
-- [ ] Terms of Service
-- [ ] Privacy Policy
-- [ ] FAQ
+- [x] Footer
+- [x] FAQ
+
+## Change Log
+
+### 10/11/2024
+
+#### Features & Enhancements
+
+- ✨ Added FAQ Page
+- 🔄 Using Fetch News API for Main Page
+- 🔐 Added Sign In Page
+- 📝 Added Sign Up Page
+
+#### UI/UX Improvements
+
+- 🎨 Fixing CSS Autofill
+- 📱 Adjusting CSS for better UX

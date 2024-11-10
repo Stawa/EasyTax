@@ -21,7 +21,7 @@ export default function Help() {
       icon: <FaQuestionCircle className="h-8 w-8 text-blue-600" />,
       title: "FAQ",
       description: "Temukan jawaban untuk pertanyaan yang sering diajukan",
-      link: "/faq",
+      link: "/help/faq",
     },
     {
       icon: <MdEmail className="h-8 w-8 text-blue-600" />,

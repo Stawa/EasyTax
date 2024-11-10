@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FaCalendarAlt, FaSave, FaTrash } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaCalendarCheck,
+  FaSave,
+  FaStickyNote,
+} from "react-icons/fa";
 import LowerNavBar from "~/components/LowerNavBar";
 import type { MetaFunction } from "@remix-run/node";
 
@@ -85,7 +90,12 @@ export default function Calendar() {
             transition={{ duration: 0.5 }}
             className="bg-white rounded-xl shadow-lg p-6 sm:p-8"
           >
-            <h2 className="text-xl font-semibold mb-4">Jadwal Pajak</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <div className="bg-blue-100 rounded-full p-2">
+                <FaCalendarCheck className="text-blue-600 h-5 w-5" />
+              </div>
+              <span>Jadwal Pajak</span>
+            </h2>
             <div className="space-y-4">
               {taxDates.map((item, index) => {
                 const days = calculateTimeRemaining(item.date);
@@ -136,21 +146,25 @@ export default function Calendar() {
             transition={{ duration: 0.5 }}
             className="bg-white rounded-xl shadow-lg p-6 sm:p-8 h-full flex flex-col"
           >
-            <h2 className="text-xl font-semibold mb-4">Catatan Pribadi</h2>
-            <form
-              onSubmit={handleSubmitNote}
-              className="flex-1 flex flex-col"
-            >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="bg-blue-100 rounded-full p-2">
+                <FaStickyNote className="text-blue-600 h-5 w-5" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Catatan Pribadi
+              </h2>
+            </div>
+            <form onSubmit={handleSubmitNote} className="flex-1 flex flex-col">
               <textarea
                 value={noteText}
                 onChange={(e) => setNoteText(e.target.value)}
                 className="flex-1 h-full w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 resize-none"
                 placeholder="Tulis catatan Anda di sini..."
               />
-              <div className="mt-auto pt-4">
+              <div className="mt-auto pt-4 flex sm:justify-end">
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto sm:px-8 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center gap-2"
                 >
                   <FaSave /> Simpan Catatan
                 </button>
