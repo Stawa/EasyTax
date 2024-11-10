@@ -256,8 +256,8 @@ export default function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 sm:py-16 px-2 sm:px-6 lg:px-8 relative overflow-hidden">
-      <div className="container mx-auto px-2 sm:px-6 lg:px-8 py-6 sm:py-12 max-w-full">
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 2xl:px-16 py-6 sm:py-12 lg:py-16 2xl:py-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -267,7 +267,7 @@ export default function Calculator() {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
             Kalkulator <span className="text-blue-600">Pajak</span>
           </h1>
-          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
             Hitung pajak Anda dengan mudah dan akurat menggunakan kalkulator
             pajak EasyTax
           </p>
@@ -277,7 +277,7 @@ export default function Calculator() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-full mx-auto bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8"
+          className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8"
         >
           {!showResults && (
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -474,115 +474,109 @@ export default function Calculator() {
                   </select>
                 </div>
 
-                {showPTKPModal && (
-                  <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4 sm:p-0 overflow-y-auto">
-                    <div className="min-h-screen flex items-center justify-center w-full">
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        className="bg-white rounded-xl p-4 sm:p-8 w-full max-w-2xl mx-auto shadow-2xl my-4"
-                      >
-                        <div className="flex items-center justify-between mb-4 sm:mb-6">
-                          <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
-                            Edit PTKP
-                          </h3>
-                          <button
-                            onClick={() => setShowPTKPModal(false)}
-                            className="p-1.5 sm:p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+                {/* Mobile View */}
+                <div className="block sm:hidden">
+                  {filteredRecords.map((record, index) => (
+                    <motion.div
+                      key={record.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="mb-4 p-4 border rounded-lg bg-white shadow-sm"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium text-gray-900">
+                          {record.tanggal}
+                        </span>
+                        <div className="flex space-x-2">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => handleEdit(record)}
+                            className="text-blue-600 hover:text-blue-800 transition-colors p-1.5 rounded hover:bg-blue-100"
+                            title="Edit"
                           >
-                            <FaTimes className="w-4 h-4 sm:w-5 sm:h-5" />
-                          </button>
+                            <FaEdit className="w-4 h-4" />
+                          </motion.button>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => handleDelete(record.id)}
+                            className="text-red-600 hover:text-red-800 transition-colors p-1.5 rounded hover:bg-red-100"
+                            title="Hapus"
+                          >
+                            <FaTrash className="w-4 h-4" />
+                          </motion.button>
                         </div>
-                        <div className="space-y-2 mb-4 sm:mb-6 max-h-[60vh] overflow-y-auto">
-                          {ptkpOptions.map((option) => (
-                            <button
-                              key={option.value}
-                              onClick={() => handlePTKPChange(option.value)}
-                              className={`w-full text-left px-4 sm:px-6 py-3 sm:py-4 rounded-xl transition-colors flex items-center justify-between group ${
-                                selectedPTKP === option.value
-                                  ? "bg-blue-50 text-blue-600"
-                                  : "hover:bg-blue-50"
-                              }`}
-                            >
-                              <span
-                                className={`text-sm sm:text-base font-medium ${
-                                  selectedPTKP === option.value
-                                    ? "text-blue-600"
-                                    : "text-gray-800 group-hover:text-blue-600"
-                                }`}
-                              >
-                                {option.label}
-                              </span>
-                              <motion.span
-                                initial={{ opacity: 0 }}
-                                animate={{
-                                  opacity:
-                                    selectedPTKP === option.value ? 1 : 0,
-                                }}
-                                className="text-blue-600"
-                              >
-                                <FaCheck className="w-4 h-4 sm:w-5 sm:h-5" />
-                              </motion.span>
-                            </button>
-                          ))}
-                        </div>
-                        <button
-                          onClick={() => setShowPTKPModal(false)}
-                          className="w-full bg-white border-2 border-gray-300 text-gray-700 py-3 sm:py-4 px-6 sm:px-8 rounded-xl text-sm sm:text-base font-semibold hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 shadow-sm flex items-center justify-center gap-2"
-                        >
-                          <FaTimes className="w-4 h-4" />
-                          Batal
-                        </button>
-                      </motion.div>
-                    </div>
-                  </div>
-                )}
+                      </div>
+                      <div className="text-xs text-gray-500 mb-2">
+                        <div>Keterangan: {record.keterangan}</div>
+                        <div>Nominal: Rp {formatNumber(record.nominal)}</div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
 
-                {/* Saved Table */}
-                <div className="overflow-x-auto">
-                  <table className="w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">
-                          No
-                        </th>
-                        <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">
-                          Sumber Dana
-                        </th>
-                        <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">
+                {/* Desktop View */}
+                <div className="hidden sm:block overflow-x-auto">
+                  <table className="min-w-full border border-gray-200 bg-white">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider border-b border-r border-gray-200">
                           Tanggal
                         </th>
-                        <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">
+                        <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider border-b border-r border-gray-200">
+                          Keterangan
+                        </th>
+                        <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider border-b border-r border-gray-200">
                           Nominal
                         </th>
-                        <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900 uppercase tracking-wider border border-gray-300">
-                          Keterangan
+                        <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-200">
+                          Aksi
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody>
                       {filteredRecords.map((record, index) => (
-                        <tr
+                        <motion.tr
                           key={record.id}
-                          className="hover:bg-gray-50 transition-colors"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.5, delay: index * 0.1 }}
+                          className="hover:bg-blue-50/50 transition-colors"
                         >
-                          <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 font-medium border border-gray-300">
-                            {index + 1}
-                          </td>
-                          <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 font-medium border border-gray-300">
-                            {record.sumberDana}
-                          </td>
-                          <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700 border border-gray-300">
+                          <td className="px-4 lg:px-6 py-4 text-sm text-gray-900 border-b border-r border-gray-200">
                             {record.tanggal}
                           </td>
-                          <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 font-semibold border border-gray-300">
-                            Rp {formatNumber(record.nominal)}
-                          </td>
-                          <td className="px-4 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700 border border-gray-300">
+                          <td className="px-4 lg:px-6 py-4 text-sm text-gray-700 border-b border-r border-gray-200">
                             {record.keterangan}
                           </td>
-                        </tr>
+                          <td className="px-4 lg:px-6 py-4 text-sm font-medium text-gray-900 border-b border-r border-gray-200">
+                            Rp {formatNumber(record.nominal)}
+                          </td>
+                          <td className="px-4 lg:px-6 py-4 border-b border-gray-200">
+                            <div className="flex space-x-3">
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={() => handleEdit(record)}
+                                className="text-blue-600 hover:text-blue-800 transition-colors p-1.5 rounded hover:bg-blue-100"
+                                title="Edit"
+                              >
+                                <FaEdit className="w-4 h-4" />
+                              </motion.button>
+                              <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={() => handleDelete(record.id)}
+                                className="text-red-600 hover:text-red-800 transition-colors p-1.5 rounded hover:bg-red-100"
+                                title="Hapus"
+                              >
+                                <FaTrash className="w-4 h-4" />
+                              </motion.button>
+                            </div>
+                          </td>
+                        </motion.tr>
                       ))}
                     </tbody>
                   </table>
@@ -739,19 +733,19 @@ export default function Calculator() {
               )}
 
               <div className="overflow-x-auto">
-                <table className="w-full border-collapse border border-gray-300 bg-white">
+                <table className="min-w-full border border-gray-200 bg-white">
                   <thead>
-                    <tr className="bg-[#f8f9fa]">
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border border-gray-300 bg-gradient-to-b from-gray-100 to-gray-200">
+                    <tr className="bg-gray-100">
+                      <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider border-b border-r border-gray-200">
                         Tanggal
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border border-gray-300 bg-gradient-to-b from-gray-100 to-gray-200">
+                      <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider border-b border-r border-gray-200">
                         Keterangan
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border border-gray-300 bg-gradient-to-b from-gray-100 to-gray-200">
+                      <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider border-b border-r border-gray-200">
                         Nominal
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 border border-gray-300 bg-gradient-to-b from-gray-100 to-gray-200">
+                      <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider border-b border-gray-200">
                         Aksi
                       </th>
                     </tr>
@@ -760,22 +754,21 @@ export default function Calculator() {
                     {filteredRecords.map((record, index) => (
                       <motion.tr
                         key={record.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className={`${
-                          index % 2 === 0 ? "bg-white" : "bg-[#f8f9fa]"
-                        } hover:bg-blue-50 transition-colors`}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        className="hover:bg-blue-50/50 transition-colors"
                       >
-                        <td className="px-6 py-4 text-sm text-gray-700 border border-gray-300">
+                        <td className="px-4 lg:px-6 py-4 text-sm text-gray-900 border-b border-r border-gray-200">
                           {record.tanggal}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-700 border border-gray-300">
+                        <td className="px-4 lg:px-6 py-4 text-sm text-gray-700 border-b border-r border-gray-200">
                           {record.keterangan}
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-900 font-semibold border border-gray-300">
+                        <td className="px-4 lg:px-6 py-4 text-sm font-medium text-gray-900 border-b border-r border-gray-200">
                           Rp {formatNumber(record.nominal)}
                         </td>
-                        <td className="px-6 py-4 border border-gray-300">
+                        <td className="px-4 lg:px-6 py-4 border-b border-gray-200">
                           <div className="flex space-x-3">
                             <motion.button
                               whileHover={{ scale: 1.1 }}
@@ -804,33 +797,33 @@ export default function Calculator() {
               </div>
             </div>
           )}
+
+          {/* Front Results */}
           {!showResults && showTable && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="mt-8 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 rounded-2xl p-8 text-white shadow-xl"
+              className="mt-8 space-y-6 sm:space-y-8"
             >
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-white/10 rounded-xl">
-                    <FaCalculator className="text-3xl text-white/90" />
-                  </div>
-                  <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                    Hasil Perhitungan Pajak
-                  </h3>
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-blue-50 rounded-lg">
+                  <FaCalculator className="text-2xl text-blue-600" />
                 </div>
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">
+                  Ringkasan Perhitungan
+                </h3>
               </div>
 
-              <div className="grid md:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-gradient-to-br from-white/15 to-white/5 rounded-xl p-6 border border-white/10 shadow-lg"
+                  whileHover={{ scale: 1.01 }}
+                  className="bg-white rounded-lg p-5 border border-gray-200 shadow-sm hover:border-blue-200 transition-colors duration-200"
                 >
-                  <h4 className="text-lg font-medium text-white/80 mb-3">
+                  <h4 className="text-sm font-medium text-gray-600 mb-2">
                     Total Penghasilan
                   </h4>
-                  <p className="text-3xl font-bold tracking-tight">
+                  <p className="text-2xl font-bold text-gray-900 tracking-tight">
                     Rp{" "}
                     {formatNumber(
                       records
@@ -846,13 +839,13 @@ export default function Calculator() {
                 </motion.div>
 
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-gradient-to-br from-white/15 to-white/5 rounded-xl p-6 border border-white/10 shadow-lg"
+                  whileHover={{ scale: 1.01 }}
+                  className="bg-white rounded-lg p-5 border border-gray-200 shadow-sm hover:border-blue-200 transition-colors duration-200"
                 >
-                  <h4 className="text-lg font-medium text-white/80 mb-3">
+                  <h4 className="text-sm font-medium text-gray-600 mb-2">
                     Tarif Pajak
                   </h4>
-                  <p className="text-3xl font-bold tracking-tight">
+                  <p className="text-2xl font-bold text-gray-900 tracking-tight">
                     {formatNumber(
                       (
                         (calculateTotalTax() /
@@ -870,25 +863,26 @@ export default function Calculator() {
                 </motion.div>
 
                 <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-gradient-to-br from-white/15 to-white/5 rounded-xl p-6 border border-white/10 shadow-lg"
+                  whileHover={{ scale: 1.01 }}
+                  className="bg-white rounded-lg p-5 border border-gray-200 shadow-sm hover:border-blue-200 transition-colors duration-200"
                 >
-                  <h4 className="text-lg font-medium text-white/80 mb-3">
+                  <h4 className="text-sm font-medium text-gray-600 mb-2">
                     Total Pajak
                   </h4>
-                  <p className="text-3xl font-bold tracking-tight">
+                  <p className="text-2xl font-bold text-gray-900 tracking-tight">
                     Rp{" "}
                     {formatNumber(Math.round(calculateTotalTax()).toString())}
                   </p>
                 </motion.div>
+
                 <motion.div
                   whileHover={{ scale: 1.01 }}
-                  className="bg-gradient-to-br from-white/15 to-white/5 rounded-xl p-6 border border-white/10 shadow-lg"
+                  className="bg-white rounded-lg p-5 border border-gray-200 shadow-sm hover:border-blue-200 transition-colors duration-200"
                 >
-                  <h4 className="text-lg font-medium text-white/80 mb-3">
-                    Penghasilan Setelah Pajak
+                  <h4 className="text-sm font-medium text-gray-600 mb-2">
+                    Penghasilan Bersih
                   </h4>
-                  <p className="text-3xl font-bold tracking-tight">
+                  <p className="text-2xl font-bold text-gray-900 tracking-tight">
                     Rp{" "}
                     {formatNumber(
                       (

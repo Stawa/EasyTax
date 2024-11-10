@@ -26,7 +26,8 @@ export default function Help() {
     {
       icon: <MdEmail className="h-8 w-8 text-blue-600" />,
       title: "Email",
-      description: "Kirim pertanyaan Anda ke support@easytax.id",
+      description:
+        "Hubungi tim support kami melalui email untuk bantuan lebih lanjut",
       link: "#contact",
     },
   ];

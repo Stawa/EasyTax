@@ -68,17 +68,17 @@ export default function Calendar() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 2xl:px-16 py-8 sm:py-16 lg:py-24 2xl:py-32 max-w-full">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 2xl:px-16 py-6 sm:py-12 lg:py-16 2xl:py-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
             Kalender <span className="text-blue-600">Pajak</span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
             Pantau jadwal pajak dan buat catatan pribadi Anda
           </p>
         </motion.div>
@@ -88,14 +88,17 @@ export default function Calendar() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-white rounded-xl shadow-lg p-6 sm:p-8"
+            className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8"
           >
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-              <div className="bg-blue-100 rounded-full p-2">
-                <FaCalendarCheck className="text-blue-600 h-5 w-5" />
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="bg-blue-100 rounded-full p-1.5 sm:p-2">
+                <FaCalendarCheck className="text-blue-600 h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <span>Jadwal Pajak</span>
-            </h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Jadwal Pajak
+              </h2>
+            </div>
+
             <div className="space-y-4">
               {taxDates.map((item, index) => {
                 const days = calculateTimeRemaining(item.date);
@@ -104,18 +107,18 @@ export default function Calendar() {
                     key={index}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="bg-blue-50 rounded-lg p-6"
+                    className="bg-blue-50 rounded-lg p-4 sm:p-6"
                   >
                     <div className="flex flex-col gap-4">
                       <div className="flex items-center gap-4">
-                        <div className="bg-blue-100 rounded-full p-3">
-                          <FaCalendarAlt className="text-blue-600 h-6 w-6" />
+                        <div className="bg-blue-100 rounded-full p-2 sm:p-3">
+                          <FaCalendarAlt className="text-blue-600 h-4 w-4 sm:h-5 sm:w-5" />
                         </div>
                         <div>
-                          <h3 className="text-lg font-semibold text-gray-900">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                             {item.description}
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-xs sm:text-sm text-gray-500">
                             {new Date(item.date).toLocaleDateString("id-ID", {
                               weekday: "long",
                               year: "numeric",
@@ -128,7 +131,7 @@ export default function Calendar() {
                               hour12: true,
                             })}
                           </p>
-                          <span className="text-sm font-medium text-blue-600">
+                          <span className="text-xs sm:text-sm font-medium text-blue-600">
                             {days} hari tersisa
                           </span>
                         </div>
@@ -144,13 +147,13 @@ export default function Calendar() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="bg-white rounded-xl shadow-lg p-6 sm:p-8 h-full flex flex-col"
+            className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 h-full flex flex-col"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="bg-blue-100 rounded-full p-2">
-                <FaStickyNote className="text-blue-600 h-5 w-5" />
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+              <div className="bg-blue-100 rounded-full p-1.5 sm:p-2">
+                <FaStickyNote className="text-blue-600 h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                 Catatan Pribadi
               </h2>
             </div>
@@ -158,15 +161,15 @@ export default function Calendar() {
               <textarea
                 value={noteText}
                 onChange={(e) => setNoteText(e.target.value)}
-                className="flex-1 h-full w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 resize-none"
+                className="flex-1 h-full w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 resize-none text-sm sm:text-base"
                 placeholder="Tulis catatan Anda di sini..."
               />
               <div className="mt-auto pt-4 flex sm:justify-end">
                 <button
                   type="submit"
-                  className="w-full sm:w-auto sm:px-8 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto sm:px-6 bg-blue-600 text-white py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center gap-2 text-sm"
                 >
-                  <FaSave /> Simpan Catatan
+                  <FaSave className="h-3 w-3 sm:h-4 sm:w-4" /> Simpan Catatan
                 </button>
               </div>
             </form>

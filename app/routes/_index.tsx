@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   FaBullhorn,
   FaChartLine,
@@ -9,9 +9,22 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import LowerNavBar from "~/components/LowerNavBar";
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { useState, useEffect } from "react";
-import { fetchNews, type NewsResponse } from "~/scripts/news";
+import { NewsResponse } from "~/types/news";
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  try {
+    const response = await fetch(`${request.url}api/latest`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch news data");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error in loader:", error);
+    return { error: "Failed to fetch news data" };
+  }
+}
 
 export const meta: MetaFunction = () => {
   return [
@@ -105,6 +118,7 @@ const NewsCard = ({
           </div>
           <motion.a
             href={card.pageUrl}
+            target="_blank"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-50 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
@@ -136,23 +150,17 @@ const NewsSkeletonLoader = ({ index }: { index: number }) => (
 );
 
 export default function Index() {
+  const { data } = useLoaderData<typeof loader>();
+
   const [newsCards, setNewsCards] = useState<NewsResponse["data"]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadNews = async () => {
-      try {
-        const response = await fetchNews();
-        setNewsCards(response.data);
-      } catch (error) {
-        console.error("Failed to load news:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadNews();
-  }, []);
+    if (data) {
+      setNewsCards(data);
+      setIsLoading(false);
+    }
+  }, [data]);
 
   return (
     <div className="min-h-screen bg-gray-50 overflow-hidden">

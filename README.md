@@ -19,6 +19,7 @@
 - [ ] User Profile
 - [ ] Account Settings
 - [ ] User Dashboard
+- [ ] Send Message to Support
 
 ## Public Pages ✅
 
@@ -35,11 +36,19 @@
 #### Features & Enhancements
 
 - ✨ Added FAQ Page
+- 🛠️ Services Page (UI only, functionality in progress)
+  - 📜 Added History Page (UI only, API integration pending)
+  - 📊 Added Status Page (UI only, backend integration needed)
+  - 📅 Added Calendar Page (UI only)
+  - 🧮 Added Calculator Page (UI only, calculations not implemented)
+- 🔐 Added Sign In Page (UI only, authentication pending)
+- 📝 Added Sign Up Page (UI only, registration flow not implemented)
 - 🔄 Using Fetch News API for Main Page
-- 🔐 Added Sign In Page
-- 📝 Added Sign Up Page
+  - 🔧 Added fallback skeleton loading when API fails
 
 #### UI/UX Improvements
 
 - 🎨 Fixing CSS Autofill
 - 📱 Adjusting CSS for better UX
+
+Note: Several pages have UI implemented but are pending full functionality and backend integration. Authentication, data persistence, and core business logic will be implemented in future updates.
