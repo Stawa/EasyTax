@@ -52,5 +52,6 @@
 
 - 🎨 Fixing CSS Autofill
 - 📱 Adjusting CSS for better UX
+- 🎨 Reworked Sign In & Sign Up Pages
 
 Note: Several pages have UI implemented but are pending full functionality and backend integration. Authentication, data persistence, and core business logic will be implemented in future updates.

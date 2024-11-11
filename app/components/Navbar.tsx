@@ -21,10 +21,12 @@ export default function Navbar() {
     { to: "/about", text: "Tentang Kami" },
   ];
 
-  const isActive = (to: string) =>
-    currentActive === to ||
-    (currentActive === "/" && to === "/") ||
-    (currentActive.startsWith("/services") && to === "/services");
+  const isActive = (to: string) => {
+    if (to === "/") {
+      return currentActive === "/";
+    }
+    return currentActive.startsWith(to);
+  };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
