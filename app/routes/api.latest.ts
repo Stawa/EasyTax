@@ -19,22 +19,8 @@ const fetchNews = async (): Promise<NewsResponse> => {
   try {
     const response = await fetch(url.toString(), {
       headers: {
-        Accept:
-          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-        "Accept-Encoding": "gzip, deflate, br, zstd",
-        "Accept-Language": "en-US,en;q=0.9,id;q=0.8,ru;q=0.7",
-        "Cache-Control": "max-age=0",
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-        "Sec-Ch-Ua":
-          '"Chromium";v="130", "Google Chrome";v="130", "Not?A_Brand";v="99"',
-        "Sec-Ch-Ua-Mobile": "?0",
-        "Sec-Ch-Ua-Platform": '"Windows"',
-        "Sec-Fetch-Dest": "document",
-        "Sec-Fetch-Mode": "navigate",
-        "Sec-Fetch-Site": "none",
-        "Sec-Fetch-User": "?1",
-        "Upgrade-Insecure-Requests": "1",
+        "User-Agent": "Mozilla/5.0 (compatible; MyApp/1.0; +http://myapp.com)",
+        Accept: "application/json",
       },
     });
 
@@ -55,12 +41,7 @@ const fetchNews = async (): Promise<NewsResponse> => {
 export const loader: LoaderFunction = async ({ request }) => {
   try {
     const response = await fetchNews();
-    return json<NewsResponse>(response, {
-      headers: {
-        "Cache-Control": "public, max-age=60", // Cache for 1 minute
-        Vary: "Origin",
-      },
-    });
+    return json<NewsResponse>(response);
   } catch (error) {
     console.error("Loader error:", error);
     return json<ErrorResponse>(
