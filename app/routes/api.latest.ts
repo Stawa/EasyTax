@@ -2,6 +2,8 @@ import { json } from "@remix-run/node";
 import type { LoaderFunction } from "@remix-run/node";
 import { NewsResponse } from "~/types/news";
 
+export const config = { runtime: "edge" };
+
 interface ErrorResponse {
   error: string;
   reason: string;
