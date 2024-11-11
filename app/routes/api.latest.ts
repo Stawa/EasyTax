@@ -25,7 +25,15 @@ const fetchNews = async (): Promise<NewsResponse> => {
         Accept: "application/json",
         Origin: "https://www.cnbcindonesia.com",
         Referer: "https://www.cnbcindonesia.com",
+        // Adding additional headers that might help bypass the 403
+        "Accept-Language": "en-US,en;q=0.9",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        Connection: "keep-alive",
       },
+      // Adding credentials to handle potential CORS issues
+      credentials: "include",
     });
 
     if (!response.ok) {
