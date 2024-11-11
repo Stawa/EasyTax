@@ -8,12 +8,11 @@ import {
   ScrollRestoration,
   useRouteError,
 } from "@remix-run/react";
-import { lazy, Suspense } from "react";
 import "~/tailwind.css";
 
-const Navbar = lazy(() => import("~/components/Navbar"));
-const ErrorPage = lazy(() => import("~/components/404"));
-const Footer = lazy(() => import("~/components/Footer"));
+import Navbar from "~/components/Navbar";
+import ErrorPage from "~/components/404";
+import Footer from "~/components/Footer";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -33,10 +32,7 @@ interface DocumentProps {
   is404?: boolean;
 }
 
-function Document({
-  children,
-  is404 = false,
-}: DocumentProps) {
+function Document({ children, is404 = false }: DocumentProps) {
   return (
     <html lang="en">
       <head>
@@ -77,9 +73,7 @@ export function ErrorBoundary() {
 
   return (
     <Document is404={errorDetails.statusCode === 404}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <ErrorPage {...errorDetails} />
-      </Suspense>
+      <ErrorPage {...errorDetails} />
     </Document>
   );
 }

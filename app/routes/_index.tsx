@@ -7,7 +7,7 @@ import {
   FaClock,
   FaArrowRight,
 } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import LowerNavBar from "~/components/LowerNavBar";
 import { Link, useLoaderData } from "@remix-run/react";
 import { useState, useEffect } from "react";
@@ -45,17 +45,17 @@ interface Feature {
 
 const features: Feature[] = [
   {
-    icon: <FaCalculator className="h-6 w-6 sm:h-8 sm:w-8" />,
+    icon: <FaCalculator className="h-5 w-5 xs:h-6 xs:w-6 sm:h-8 sm:w-8" />,
     title: "Kalkulasi Pajak",
     description: "Hitung pajak Anda dengan mudah dan akurat",
   },
   {
-    icon: <FaFileAlt className="h-6 w-6 sm:h-8 sm:w-8" />,
+    icon: <FaFileAlt className="h-5 w-5 xs:h-6 xs:w-6 sm:h-8 sm:w-8" />,
     title: "Lapor SPT Online",
     description: "Laporkan SPT secara digital dengan aman",
   },
   {
-    icon: <FaChartLine className="h-6 w-6 sm:h-8 sm:w-8" />,
+    icon: <FaChartLine className="h-5 w-5 xs:h-6 xs:w-6 sm:h-8 sm:w-8" />,
     title: "Analisis Keuangan",
     description: "Pantau dan analisis data perpajakan Anda",
   },
@@ -69,16 +69,16 @@ const FeatureCard = ({
   index: number;
 }) => (
   <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ delay: index * 0.2 }}
-    className="bg-white p-4 sm:p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: index * 0.2 }}
+    className="bg-white p-3 xs:p-4 sm:p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow"
   >
-    <div className="text-blue-600 mb-3 sm:mb-4">{feature.icon}</div>
-    <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base 2xl:text-lg">
+    <div className="text-blue-600 mb-2 xs:mb-3 sm:mb-4">{feature.icon}</div>
+    <h3 className="font-semibold text-gray-900 mb-1.5 xs:mb-2 text-xs xs:text-sm sm:text-base 2xl:text-lg">
       {feature.title}
     </h3>
-    <p className="text-xs sm:text-sm 2xl:text-base text-gray-600">
+    <p className="text-xs xs:text-sm 2xl:text-base text-gray-600">
       {feature.description}
     </p>
   </motion.div>
@@ -92,13 +92,13 @@ const NewsCard = ({
   index: number;
 }) => (
   <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
     transition={{ duration: 0.5, delay: index * 0.1 }}
-    className="p-4 sm:p-6 hover:bg-gray-50 transition-colors"
+    className="p-3 xs:p-4 sm:p-6 hover:bg-gray-50 transition-colors"
   >
-    <div className="flex gap-4 sm:gap-6">
-      <div className="h-24 w-32 sm:h-32 sm:w-40 flex-shrink-0">
+    <div className="flex gap-3 xs:gap-4 sm:gap-6">
+      <div className="h-20 w-28 xs:h-24 xs:w-32 sm:h-32 sm:w-40 flex-shrink-0">
         <img
           src={card.imageUrl}
           alt={card.title}
@@ -107,12 +107,12 @@ const NewsCard = ({
       </div>
       <div className="flex flex-col flex-1 justify-between">
         <div>
-          <h3 className="font-semibold text-gray-900 text-base sm:text-lg 2xl:text-xl line-clamp-2 mb-2">
+          <h3 className="font-bold text-gray-800 text-sm xs:text-base sm:text-lg 2xl:text-xl line-clamp-2 mb-2 xs:mb-3 tracking-tight">
             {card.title}
           </h3>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="inline-flex items-center rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
-              <FaClock className="h-3 w-3 mr-1.5" />
+          <div className="flex items-center gap-2 mb-3 xs:mb-4">
+            <span className="inline-flex items-center rounded-full bg-blue-100 px-3 xs:px-4 py-1.5 xs:py-2 text-xs xs:text-sm font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/20">
+              <FaClock className="h-3 w-3 xs:h-3.5 xs:w-3.5 mr-2" />
               {card.formatedDate}
             </span>
           </div>
@@ -121,10 +121,16 @@ const NewsCard = ({
             target="_blank"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center px-4 py-2 rounded-lg bg-blue-50 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
+            className="inline-flex items-center px-4 xs:px-5 py-2 xs:py-2.5 rounded-lg bg-blue-600 text-xs xs:text-sm font-semibold text-white hover:bg-blue-700 transition-colors shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 group"
           >
             Pelajari Lebih Lanjut
-            <FaArrowRight className="h-3.5 w-3.5 ml-2" />
+            <motion.div
+              initial={{ x: 0 }}
+              whileHover={{ x: 4 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <FaArrowRight className="h-3.5 w-3.5 xs:h-4 xs:w-4 ml-2 xs:ml-2.5 transition-transform" />
+            </motion.div>
           </motion.a>
         </div>
       </div>
@@ -133,17 +139,17 @@ const NewsCard = ({
 );
 
 const NewsSkeletonLoader = ({ index }: { index: number }) => (
-  <div key={index} className="p-4 sm:p-6 animate-pulse">
-    <div className="flex gap-4 sm:gap-6">
-      <div className="h-24 w-32 sm:h-32 sm:w-40 flex-shrink-0 bg-gray-200 rounded-lg"></div>
+  <div key={index} className="p-3 xs:p-4 sm:p-6 animate-pulse">
+    <div className="flex gap-3 xs:gap-4 sm:gap-6">
+      <div className="h-20 w-28 xs:h-24 xs:w-32 sm:h-32 sm:w-40 flex-shrink-0 bg-gray-200 rounded-lg"></div>
       <div className="flex-1">
-        <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/2 mb-3"></div>
-        <div className="flex gap-2 mb-3">
-          <div className="h-6 w-20 bg-gray-200 rounded-full"></div>
-          <div className="h-6 w-32 bg-gray-200 rounded-full"></div>
+        <div className="h-4 xs:h-5 sm:h-6 bg-gray-200 rounded w-3/4 mb-1.5 xs:mb-2"></div>
+        <div className="h-3 xs:h-3.5 sm:h-4 bg-gray-200 rounded w-1/2 mb-2 xs:mb-3"></div>
+        <div className="flex gap-2 mb-2 xs:mb-3">
+          <div className="h-5 xs:h-6 w-16 xs:w-20 bg-gray-200 rounded-full"></div>
+          <div className="h-5 xs:h-6 w-28 xs:w-32 bg-gray-200 rounded-full"></div>
         </div>
-        <div className="h-8 w-36 bg-gray-200 rounded-lg"></div>
+        <div className="h-6 xs:h-7 sm:h-8 w-32 xs:w-36 bg-gray-200 rounded-lg"></div>
       </div>
     </div>
   </div>
@@ -165,104 +171,115 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-gray-50 overflow-hidden">
       <div className="relative">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="container mx-auto px-4 sm:px-6 lg:px-8 2xl:px-16 py-8 sm:py-16 lg:py-24 2xl:py-32 max-w-full"
-        >
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 2xl:gap-16 items-center">
-            {/* Left Section */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="space-y-6 lg:space-y-8 2xl:space-y-12"
-            >
-              <div className="space-y-4 sm:space-y-6">
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl 2xl:text-7xl font-bold text-gray-900">
-                  <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                    EASYTAX
-                  </span>
-                </h1>
-                <p className="text-base sm:text-lg lg:text-xl 2xl:text-2xl text-gray-600 leading-relaxed">
-                  Kelola perpajakan Anda dengan lebih efisien menggunakan
-                  EasyTax. Platform digital terpercaya untuk perhitungan pajak,
-                  pelaporan SPT, dan informasi perpajakan terkini.
-                </p>
-              </div>
+        <AnimatePresence>
+          <motion.div
+            key="content"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="container mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 2xl:px-16 py-6 xs:py-8 sm:py-16 lg:py-24 2xl:py-32 max-w-full"
+          >
+            <div className="grid lg:grid-cols-2 gap-6 xs:gap-8 lg:gap-12 2xl:gap-16 items-center">
+              {/* Left Section */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="space-y-4 xs:space-y-6 lg:space-y-8 2xl:space-y-12"
+              >
+                <div className="space-y-3 xs:space-y-4 sm:space-y-6">
+                  <h1 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl 2xl:text-7xl font-bold text-gray-900">
+                    <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                      EASYTAX
+                    </span>
+                  </h1>
+                  <p className="text-sm xs:text-base sm:text-lg lg:text-xl 2xl:text-2xl text-gray-600 leading-relaxed">
+                    Kelola perpajakan Anda dengan lebih efisien menggunakan
+                    EasyTax. Platform digital terpercaya untuk perhitungan
+                    pajak, pelaporan SPT, dan informasi perpajakan terkini.
+                  </p>
+                </div>
 
-              <div className="flex flex-wrap gap-3 sm:gap-4">
-                <Link
-                  to="/sign-in"
-                  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base 2xl:text-lg rounded-lg shadow-lg hover:shadow-xl transition-all"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className="flex items-center gap-2"
+                <div className="flex flex-wrap gap-2 xs:gap-3 sm:gap-4">
+                  <Link
+                    to="/sign-in"
+                    className="group flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 text-xs xs:text-sm sm:text-base 2xl:text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
                   >
-                    Mulai Sekarang
-                    <FaArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
-                  </motion.div>
-                </Link>
-                <Link
-                  to="/services"
-                  className="flex items-center gap-2 bg-white text-blue-600 border-2 border-blue-600 font-medium px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base 2xl:text-lg rounded-lg shadow-lg hover:shadow-xl transition-all"
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className="flex items-center gap-2"
+                    <motion.div
+                      whileHover={{ 
+                        scale: 1.05,
+                        transition: { duration: 0.3 }
+                      }}
+                      className="flex items-center gap-1.5 xs:gap-2"
+                    >
+                      Mulai Sekarang
+                      <FaArrowRight className="h-2.5 w-2.5 xs:h-3 xs:w-3 sm:h-4 sm:w-4 transform group-hover:translate-x-1 transition-transform duration-300" />
+                    </motion.div>
+                  </Link>
+                  <Link
+                    to="/services"
+                    className="flex items-center gap-2 bg-white text-blue-600 border-2 border-blue-600 font-medium px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 sm:py-3 text-xs xs:text-sm sm:text-base 2xl:text-lg rounded-lg shadow-lg hover:shadow-xl transition-all"
                   >
-                    Pelajari Lebih Lanjut
-                  </motion.div>
-                </Link>
-              </div>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      className="flex items-center gap-1.5 xs:gap-2"
+                    >
+                      Pelajari Lebih Lanjut
+                    </motion.div>
+                  </Link>
+                </div>
 
-              {/* Features Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
-                {features.map((feature, index) => (
-                  <FeatureCard key={index} feature={feature} index={index} />
-                ))}
-              </div>
-            </motion.div>
+                {/* Features Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 xs:gap-4 sm:gap-6 mt-6 xs:mt-8 sm:mt-12">
+                  {features.map((feature, index) => (
+                    <FeatureCard key={index} feature={feature} index={index} />
+                  ))}
+                </div>
+              </motion.div>
 
-            {/* Right Section */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="lg:pl-8 2xl:pl-16"
-            >
-              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 sm:p-6">
-                  <div className="flex items-center gap-3">
-                    <FaBullhorn
-                      size={20}
-                      className="text-white sm:h-6 sm:w-6 2xl:h-8 2xl:w-8"
-                    />
-                    <h2 className="text-xl sm:text-2xl 2xl:text-3xl font-semibold text-white">
-                      Berita & Informasi Terkini
-                    </h2>
+              {/* Right Section */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="lg:pl-8 2xl:pl-16"
+              >
+                <div className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                  <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 p-4 xs:p-5 sm:p-6">
+                    <div className="flex items-center gap-3 xs:gap-4">
+                      <div className="bg-white/10 rounded-lg p-2 backdrop-blur-sm">
+                        <FaBullhorn className="h-4 w-4 xs:h-5 xs:w-5 sm:h-6 sm:w-6 2xl:h-8 2xl:w-8 text-white" />
+                      </div>
+                      <div>
+                        <h2 className="text-lg xs:text-xl sm:text-2xl 2xl:text-3xl font-bold text-white">
+                          Berita & Informasi Terkini
+                        </h2>
+                        <p className="text-xs xs:text-sm text-blue-100 mt-1">
+                          Update terbaru seputar perpajakan
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="divide-y divide-gray-100 bg-gradient-to-b from-gray-50 to-white">
+                    {isLoading
+                      ? [...Array(3)].map((_, index) => (
+                          <NewsSkeletonLoader key={index} index={index} />
+                        ))
+                      : newsCards.map((card, index) => (
+                          <NewsCard
+                            key={card.intidberita}
+                            card={card}
+                            index={index}
+                          />
+                        ))}
                   </div>
                 </div>
-
-                <div className="divide-y divide-gray-100">
-                  {isLoading
-                    ? [...Array(3)].map((_, index) => (
-                        <NewsSkeletonLoader key={index} index={index} />
-                      ))
-                    : newsCards.map((card, index) => (
-                        <NewsCard
-                          key={card.intidberita}
-                          card={card}
-                          index={index}
-                        />
-                      ))}
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </motion.div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
         <LowerNavBar />
       </div>
     </div>

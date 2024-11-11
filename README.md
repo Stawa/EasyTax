@@ -45,6 +45,7 @@
 - 📝 Added Sign Up Page (UI only, registration flow not implemented)
 - 🔄 Using Fetch News API for Main Page
   - 🔧 Added fallback skeleton loading when API fails
+  - 🛠️ Fixed API fetch issues for production environment
 
 #### UI/UX Improvements
 

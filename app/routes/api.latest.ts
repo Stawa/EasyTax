@@ -19,14 +19,13 @@ const fetchNews = async (): Promise<NewsResponse> => {
     const response = await fetch(url.toString(), {
       headers: {
         "Content-Type": "application/json",
-        // Add User-Agent header to mimic browser request
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        // Add Referer header to indicate request origin
-        Referer: "https://www.cnbcindonesia.com",
-        // Add Accept header for JSON response
+        "User-Agent": "Mozilla/5.0 (compatible)",
         Accept: "application/json",
       },
+      // Add CORS mode to allow requests from any origin
+      mode: "cors",
+      // Add cache control for better performance
+      cache: "no-cache",
     });
 
     if (!response.ok) {
@@ -43,14 +42,26 @@ const fetchNews = async (): Promise<NewsResponse> => {
   }
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
   try {
+    // Add CORS headers to allow requests from any origin
+    const headers = new Headers({
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET",
+      "Access-Control-Allow-Headers": "Content-Type",
+    });
+
     const response = await fetchNews();
-    return json<NewsResponse>(response);
+    return json<NewsResponse>(response, { headers });
   } catch (error) {
     return json<ErrorResponse>(
       { error: "Failed to fetch news data" },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
     );
   }
 };
