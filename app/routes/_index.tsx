@@ -13,39 +13,13 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import { NewsResponse } from "~/types/news";
 
-const NEWS_API_URL = "https://www.cnbcindonesia.com/api/channelbox/search";
-const NEWS_TAG = "pajak";
-const NEWS_LIMIT = 3;
-
 export async function loader({ request }: LoaderFunctionArgs) {
   try {
-    const url = new URL(NEWS_API_URL);
-    url.searchParams.append("tag", NEWS_TAG);
-    url.searchParams.append("limit", NEWS_LIMIT.toString());
-
-    const response = await fetch(url.toString(), {
-      headers: {
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (compatible)",
-        Accept: "application/json",
-      },
-      mode: "cors",
-      cache: "no-cache",
-    });
-
+    const response = await fetch(`${request.url}api/latest`);
     if (!response.ok) {
-      console.error(
-        `Failed to fetch news: ${response.status} ${response.statusText}`
-      );
-      throw new Error(
-        `Failed to fetch news: ${response.status} ${response.statusText}`
-      );
+      throw new Error("Failed to fetch news data");
     }
-
-    const data = await response.json();
-    const { data: newsData } = data;
-
-    return { data: newsData };
+    return await response.json();
   } catch (error) {
     console.error("Error in loader:", error);
     return { error: "Failed to fetch news data" };

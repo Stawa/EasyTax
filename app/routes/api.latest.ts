@@ -19,13 +19,12 @@ const fetchNews = async (): Promise<NewsResponse> => {
     const response = await fetch(url.toString(), {
       headers: {
         "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (compatible)",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         Accept: "application/json",
+        Origin: "https://www.cnbcindonesia.com",
+        Referer: "https://www.cnbcindonesia.com",
       },
-      // Add CORS mode to allow requests from any origin
-      mode: "cors",
-      // Add cache control for better performance
-      cache: "no-cache",
     });
 
     if (!response.ok) {
@@ -44,24 +43,18 @@ const fetchNews = async (): Promise<NewsResponse> => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
-    // Add CORS headers to allow requests from any origin
-    const headers = new Headers({
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET",
-      "Access-Control-Allow-Headers": "Content-Type",
-    });
-
     const response = await fetchNews();
-    return json<NewsResponse>(response, { headers });
+    return json<NewsResponse>(response, {
+      headers: {
+        "Cache-Control": "public, max-age=60", // Cache for 1 minute
+        Vary: "Origin",
+      },
+    });
   } catch (error) {
+    console.error("Loader error:", error);
     return json<ErrorResponse>(
       { error: "Failed to fetch news data" },
-      {
-        status: 500,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
+      { status: 500 }
     );
   }
 };
