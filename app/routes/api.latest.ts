@@ -4,6 +4,7 @@ import { NewsResponse } from "~/types/news";
 
 interface ErrorResponse {
   error: string;
+  reason: string;
 }
 
 const NEWS_API_URL = "https://www.cnbcindonesia.com/api/channelbox/search";
@@ -53,7 +54,11 @@ export const loader: LoaderFunction = async ({ request }) => {
   } catch (error) {
     console.error("Loader error:", error);
     return json<ErrorResponse>(
-      { error: "Failed to fetch news data" },
+      {
+        error: "Failed to fetch news data",
+        reason:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      },
       { status: 500 }
     );
   }
