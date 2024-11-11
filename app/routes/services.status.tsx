@@ -245,21 +245,21 @@ export default function Status() {
               </p>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex-1 inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 via-green-600 to-green-700 text-white hover:from-green-700 hover:via-green-700 hover:to-green-800 transition-all duration-300 shadow-lg hover:shadow-xl"
+                className="flex-1 inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm sm:text-base bg-gradient-to-r from-green-600 via-green-600 to-green-700 text-white hover:from-green-700 hover:via-green-700 hover:to-green-800 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                <FaDownload className="mr-2" />
+                <FaDownload className="h-4 w-4 sm:h-5 sm:w-5 mr-1.5 sm:mr-2" />
                 Unduh PDF
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex-1 inline-flex items-center justify-center px-6 py-3 rounded-xl bg-gradient-to-r from-gray-50 via-blue-50 to-indigo-50 text-indigo-700 hover:from-gray-100 hover:via-blue-100 hover:to-indigo-100 transition-all duration-300 shadow-md hover:shadow-lg border border-indigo-100"
+                className="flex-1 inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl text-sm sm:text-base bg-gradient-to-r from-gray-50 via-blue-50 to-indigo-50 text-indigo-700 hover:from-gray-100 hover:via-blue-100 hover:to-indigo-100 transition-all duration-300 shadow-md hover:shadow-lg border border-indigo-100"
               >
-                <FaPrint className="mr-2" />
+                <FaPrint className="h-4 w-4 sm:h-5 sm:w-5 mr-1.5 sm:mr-2" />
                 Cetak
               </motion.button>
             </div>

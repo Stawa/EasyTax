@@ -46,6 +46,7 @@
 - 🔄 Using Fetch News API for Main Page
   - 🔧 Added fallback skeleton loading when API fails
   - 🛠️ Fixed API fetch issues for production environment
+  - 🐛 Fixed React hydration errors
 
 #### UI/UX Improvements
 
