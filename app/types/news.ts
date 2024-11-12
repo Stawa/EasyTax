@@ -1,16 +1,15 @@
 interface NewsResponse {
-  dataname: string;
-  status: string;
   message: string;
-  source: string;
   total: number;
   data: {
-    pageUrl: string;
-    intidberita: number;
-    imageUrl: string;
-    formatedDate: string;
-    date: string;
     title: string;
+    link: string;
+    contentSnippet: string;
+    isoDate: string;
+    image: {
+      small: string;
+      large: string;
+    };
   }[];
 }
 

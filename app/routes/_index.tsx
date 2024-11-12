@@ -100,7 +100,7 @@ const NewsCard = ({
     <div className="flex gap-3 xs:gap-4 sm:gap-5">
       <div className="h-20 w-28 xs:h-24 xs:w-32 sm:h-28 sm:w-36 flex-shrink-0 m-auto">
         <img
-          src={card.imageUrl}
+          src={`${card.image.large}`}
           alt={card.title}
           className="h-full w-full rounded-lg object-cover shadow-md hover:shadow-lg transition-shadow"
         />
@@ -113,11 +113,11 @@ const NewsCard = ({
           <div className="flex items-center gap-2 mb-3 xs:mb-3.5">
             <span className="inline-flex items-center rounded-full bg-blue-100 px-3 xs:px-4 py-1.5 xs:py-2 text-xs xs:text-sm font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/20">
               <FaClock className="h-3 w-3 xs:h-4 xs:w-4 mr-1.5 xs:mr-2" />
-              {card.formatedDate}
+              {card.isoDate}
             </span>
           </div>
           <motion.a
-            href={card.pageUrl}
+            href={card.link}
             target="_blank"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -268,11 +268,7 @@ export default function Index() {
                           <NewsSkeletonLoader key={index} index={index} />
                         ))
                       : newsCards.map((card, index) => (
-                          <NewsCard
-                            key={card.intidberita}
-                            card={card}
-                            index={index}
-                          />
+                          <NewsCard key={index} card={card} index={index} />
                         ))}
                   </div>
                 </div>
