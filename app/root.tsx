@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import {
   isRouteErrorResponse,
   Links,
@@ -6,6 +6,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
   useRouteError,
 } from "@remix-run/react";
 import "~/tailwind.css";
@@ -27,12 +28,26 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const version = await fetch(
+    "https://api.github.com/repos/Stawa/EasyTax/commits",
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+      },
+    }
+  );
+  const data = await version.json();
+  return { version: data[0].commit.committer.date };
+};
+
 interface DocumentProps {
   children: React.ReactNode;
+  version: string | null;
   is404?: boolean;
 }
 
-function Document({ children, is404 = false }: DocumentProps) {
+function Document({ children, is404 = false, version }: DocumentProps) {
   return (
     <html lang="en">
       <head>
@@ -46,7 +61,7 @@ function Document({ children, is404 = false }: DocumentProps) {
         <Navbar />
         {children}
         <ScrollRestoration />
-        <Footer />
+        <Footer version={version} />
         <Scripts />
       </body>
     </html>
@@ -54,8 +69,13 @@ function Document({ children, is404 = false }: DocumentProps) {
 }
 
 export default function App() {
+  const { version } = useLoaderData<typeof loader>();
+  const formattedVersion = version
+    ? new Date(version).toLocaleDateString("id-ID").replace(/\//g, ".")
+    : null;
+
   return (
-    <Document>
+    <Document version={formattedVersion}>
       <Outlet />
     </Document>
   );
@@ -72,7 +92,7 @@ export function ErrorBoundary() {
     : { statusCode: 500, message: "An unexpected error occurred" };
 
   return (
-    <Document is404={errorDetails.statusCode === 404}>
+    <Document is404={errorDetails.statusCode === 404} version={null}>
       <ErrorPage {...errorDetails} />
     </Document>
   );
