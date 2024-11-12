@@ -86,17 +86,23 @@ export default function LowerNavBar({ currentActive }: LowerNavBarProps) {
                         : "bg-blue-100"
                     }`}
                   >
-                    <div className={`${
-                      currentActive === item.to
-                        ? "text-blue-700 scale-110"
-                        : "text-blue-600"
-                    }`}>{item.icon}</div>
+                    <div
+                      className={`${
+                        currentActive === item.to
+                          ? "text-blue-700 scale-110"
+                          : "text-blue-600"
+                      }`}
+                    >
+                      {item.icon}
+                    </div>
                   </motion.div>
-                  <span className={`text-xs font-medium sm:text-sm ${
-                    currentActive === item.to
-                      ? "text-blue-700 font-semibold"
-                      : "text-gray-600"
-                  }`}>
+                  <span
+                    className={`text-xs font-medium sm:text-sm ${
+                      currentActive === item.to
+                        ? "text-blue-700 font-semibold"
+                        : "text-gray-600"
+                    }`}
+                  >
                     {item.text}
                   </span>
                 </Link>
@@ -130,17 +136,23 @@ export default function LowerNavBar({ currentActive }: LowerNavBarProps) {
                           : "bg-blue-100"
                       }`}
                     >
-                      <div className={`${
-                        currentActive === item.to
-                          ? "text-blue-700 scale-110"
-                          : "text-blue-600"
-                      }`}>{item.icon}</div>
+                      <div
+                        className={`${
+                          currentActive === item.to
+                            ? "text-blue-700 scale-110"
+                            : "text-blue-600"
+                        }`}
+                      >
+                        {item.icon}
+                      </div>
                     </motion.div>
-                    <span className={`text-sm font-medium xl:text-base ${
-                      currentActive === item.to
-                        ? "text-blue-700 font-semibold"
-                        : "text-gray-600"
-                    }`}>
+                    <span
+                      className={`text-sm font-medium xl:text-base ${
+                        currentActive === item.to
+                          ? "text-blue-700 font-semibold"
+                          : "text-gray-600"
+                      }`}
+                    >
                       {item.text}
                     </span>
                   </Link>

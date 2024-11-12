@@ -402,8 +402,8 @@ export default function Calculator() {
                   {editingId !== null
                     ? "Perbarui"
                     : records.length > 0
-                    ? "Tambahkan"
-                    : "Buat Tabel"}
+                      ? "Tambahkan"
+                      : "Buat Tabel"}
                 </motion.button>
                 {records.length > 0 && !editingId && (
                   <motion.button
