@@ -110,11 +110,11 @@ const NewsCard = ({
           <h3 className="font-bold text-gray-800 text-sm xs:text-base sm:text-lg line-clamp-2 mb-2 xs:mb-2.5 tracking-tight">
             {card.title}
           </h3>
-          <div className="flex items-center gap-2 mb-3 xs:mb-3.5">
-            <span className="inline-flex items-center rounded-full bg-blue-100 px-3 xs:px-4 py-1.5 xs:py-2 text-xs xs:text-sm font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/20">
-              <FaClock className="h-3 w-3 xs:h-4 xs:w-4 mr-1.5 xs:mr-2" />
+          <div className="flex items-center gap-1.5 xs:gap-2 mb-2.5 xs:mb-3 sm:mb-3.5">
+            <span className="inline-flex items-center rounded-full bg-blue-100 px-2 xs:px-3 sm:px-3.5 py-1 xs:py-1.5 sm:py-1.5 text-[10px] xs:text-xs sm:text-xs font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/20">
+              <FaClock className="h-2.5 w-2.5 xs:h-3 xs:w-3 sm:h-3 sm:w-3 mr-1 xs:mr-1.5 sm:mr-1.5" />
               {new Date(card.isoDate).toLocaleString("id-ID", {
-                day: "numeric",
+                day: "numeric", 
                 month: "long",
                 year: "numeric",
                 hour: "2-digit",
