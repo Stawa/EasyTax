@@ -113,7 +113,13 @@ const NewsCard = ({
           <div className="flex items-center gap-2 mb-3 xs:mb-3.5">
             <span className="inline-flex items-center rounded-full bg-blue-100 px-3 xs:px-4 py-1.5 xs:py-2 text-xs xs:text-sm font-semibold text-blue-700 ring-1 ring-inset ring-blue-700/20">
               <FaClock className="h-3 w-3 xs:h-4 xs:w-4 mr-1.5 xs:mr-2" />
-              {card.isoDate}
+              {new Date(card.isoDate).toLocaleString("id-ID", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </span>
           </div>
           <motion.a
