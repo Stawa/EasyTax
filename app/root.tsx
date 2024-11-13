@@ -14,6 +14,8 @@ import "~/tailwind.css";
 import Navbar from "~/components/Navbar";
 import ErrorPage from "~/components/404";
 import Footer from "~/components/Footer";
+import { UserProfile } from "firebase/auth";
+import { getUser } from "./auth/user.server";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -29,6 +31,7 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const user = await getUser(request);
   const version = await fetch(
     "https://api.github.com/repos/Stawa/EasyTax/commits",
     {
@@ -38,16 +41,17 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
   );
   const data = await version.json();
-  return { version: data[0].commit.committer.date };
+  return { version: data[0].commit.committer.date, user: user.user };
 };
 
 interface DocumentProps {
   children: React.ReactNode;
   version: string | null;
+  user: UserProfile | null;
   is404?: boolean;
 }
 
-function Document({ children, is404 = false, version }: DocumentProps) {
+function Document({ children, is404 = false, version, user }: DocumentProps) {
   return (
     <html lang="en">
       <head>
@@ -58,7 +62,8 @@ function Document({ children, is404 = false, version }: DocumentProps) {
         <Links />
       </head>
       <body>
-        <Navbar />
+        {/* @ts-ignore */}
+        <Navbar user={user} />
         {children}
         <ScrollRestoration />
         <Footer version={version} />
@@ -69,13 +74,13 @@ function Document({ children, is404 = false, version }: DocumentProps) {
 }
 
 export default function App() {
-  const { version } = useLoaderData<typeof loader>();
+  const { version, user } = useLoaderData<typeof loader>();
   const formattedVersion = version
     ? new Date(version).toLocaleDateString("id-ID").replace(/\//g, ".")
     : null;
 
   return (
-    <Document version={formattedVersion}>
+    <Document user={user} version={formattedVersion}>
       <Outlet />
     </Document>
   );
@@ -92,7 +97,11 @@ export function ErrorBoundary() {
     : { statusCode: 500, message: "An unexpected error occurred" };
 
   return (
-    <Document is404={errorDetails.statusCode === 404} version={null}>
+    <Document
+      user={null}
+      is404={errorDetails.statusCode === 404}
+      version={null}
+    >
       <ErrorPage {...errorDetails} />
     </Document>
   );

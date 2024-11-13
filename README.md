@@ -2,8 +2,8 @@
 
 ## Authentication & User Management
 
-- [ ] Login
-- [ ] Register
+- [x] Login
+- [x] Register
 - [ ] Forgot Password
 - [ ] Reset Password
 
@@ -41,8 +41,9 @@
   - 📊 Added Status Page (UI only, backend integration needed)
   - 📅 Added Calendar Page (UI only)
   - 🧮 Added Calculator Page (UI only, calculations not implemented)
-- 🔐 Added Sign In Page (UI only, authentication pending)
-- 📝 Added Sign Up Page (UI only, registration flow not implemented)
+- 🔐 Added Sign In Page
+- 📝 Added Sign Up Page
+- 📐 Updated Navbar with Sidebar for improved navigation
 - 🔄 Using Fetch News API for Main Page
   - 🔧 Added fallback skeleton loading when API fails
   - 🛠️ Fixed API fetch issues for production environment
