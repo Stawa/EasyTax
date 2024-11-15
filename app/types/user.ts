@@ -1,3 +1,15 @@
+interface Reports {
+  currentStatus: "completed" | "on_progress" | "not_started" | "none";
+  informations: {
+    date: Date | null;
+    name: string;
+    npwp: string;
+    number: string;
+    period: Date | null;
+    type: string;
+  };
+}
+
 interface UserProfile {
   // Firebase Auth
   id: string;
@@ -6,7 +18,7 @@ interface UserProfile {
   photoURL: string;
   // User Data
   documents: string[]; // /services/documents
-  reports: string[]; // /services/status
+  reports: Reports; // /services/status
   history: string[]; // /services/history
   note: string; // /services/calendar
   // Timestamps

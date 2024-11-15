@@ -1,4 +1,4 @@
-import { json, LoaderFunction } from "@remix-run/node";
+import { json, LoaderFunction, MetaFunction } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
 import {
   FaFileAlt,
@@ -6,11 +6,23 @@ import {
   FaCalendarAlt,
   FaChartBar,
   FaUserCircle,
+  FaStickyNote,
 } from "react-icons/fa";
 import { getSession } from "~/auth/cookie.server";
 import { firestoreService } from "~/auth/firebase.server";
 import type { UserProfile } from "~/types/user";
 import { motion } from "framer-motion";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Dashboard - EasyTax" },
+    {
+      name: "description",
+      content:
+        "Kelola perpajakan dan lihat informasi terkini di dashboard EasyTax Anda.",
+    },
+  ];
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request);
@@ -43,7 +55,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      {/* Modern Header with Accounting Theme */}
       <header className="relative overflow-hidden py-8 sm:py-12 bg-gradient-to-r from-blue-600 to-blue-800">
         <div className="absolute inset-0 bg-grid-white/[0.1] bg-grid"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-black/[0.3] to-transparent"></div>
@@ -108,54 +119,76 @@ export default function Dashboard() {
               icon: <FaFileAlt />,
               title: "Total Dokumen",
               value: userProfile.documents.length,
-              link: "/documents",
-              color: "blue",
+              link: "/services/documents",
+              iconColor: "text-blue-600 dark:text-blue-400",
+              borderColor: "border-blue-200 dark:border-blue-800",
+              hoverColor: "hover:border-blue-300 dark:hover:border-blue-700",
             },
             {
               icon: <FaChartBar />,
-              title: "Laporan",
-              value: userProfile.reports.length,
-              link: "/reports",
-              color: "green",
+              title: "Status Laporan",
+              value:
+                userProfile.reports.currentStatus === "none"
+                  ? "Belum Ada"
+                  : userProfile.reports.currentStatus === "completed"
+                    ? "Selesai"
+                    : userProfile.reports.currentStatus === "on_progress"
+                      ? "Sedang Diproses"
+                      : "Belum Dimulai",
+              link: "/services/status",
+              iconColor: "text-emerald-600 dark:text-emerald-400",
+              borderColor: "border-emerald-200 dark:border-emerald-800",
+              hoverColor:
+                "hover:border-emerald-300 dark:hover:border-emerald-700",
             },
             {
               icon: <FaHistory />,
               title: "Riwayat",
               value: userProfile.history.length,
-              link: "/history",
-              color: "purple",
+              link: "/services/history",
+              iconColor: "text-purple-600 dark:text-purple-400",
+              borderColor: "border-purple-200 dark:border-purple-800",
+              hoverColor:
+                "hover:border-purple-300 dark:hover:border-purple-700",
             },
             {
-              icon: <FaCalendarAlt />,
+              icon: <FaStickyNote />,
               title: "Catatan",
               value: userProfile.note ? "Ada" : "Kosong",
-              link: "/notes",
-              color: "pink",
+              link: "/services/calendar",
+              iconColor: "text-pink-600 dark:text-pink-400",
+              borderColor: "border-pink-200 dark:border-pink-800",
+              hoverColor: "hover:border-pink-300 dark:hover:border-pink-700",
             },
           ].map((item, index) => (
             <motion.div
               key={index}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className={`bg-white/50 dark:bg-gray-800/50 border-2 ${item.borderColor} ${item.hoverColor} rounded-xl shadow-lg hover:shadow-xl transition-all duration-300`}
               whileHover={{ scale: 1.02 }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
               <div className="p-6">
-                <div className={`text-${item.color}-500 text-2xl mb-4`}>
+                <div
+                  className={`${item.iconColor} text-2xl mb-4 transform transition-transform group-hover:scale-110`}
+                >
                   {item.icon}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">
                   {item.title}
                 </h3>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                   {item.value}
                 </p>
                 <Link
                   to={item.link}
-                  className={`mt-4 inline-block text-${item.color}-600 hover:text-${item.color}-700 font-medium text-sm`}
+                  className={`mt-4 inline-flex items-center ${item.iconColor} font-medium text-sm hover:underline gap-1 group`}
                 >
-                  Lihat detail →
+                  Lihat detail
+                  <span className="transform transition-transform group-hover:translate-x-1">
+                    →
+                  </span>
                 </Link>
               </div>
             </motion.div>

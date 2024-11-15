@@ -39,7 +39,17 @@ function createUserProfile(
     fullname: fullname || "",
     photoURL: photoURL || "",
     documents: [],
-    reports: [],
+    reports: {
+      currentStatus: "none",
+      informations: {
+        date: null,
+        name: "",
+        npwp: "",
+        number: "",
+        period: null,
+        type: "",
+      },
+    },
     history: [],
     note: "",
     createdAt: new Date(),

@@ -1,4 +1,16 @@
+import { MetaFunction } from "@remix-run/node";
 import { ComingSoon } from "~/components/ComingSoon";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Pengaturan - EasyTax" },
+    {
+      name: "description",
+      content:
+        "Kelola preferensi dan pengaturan akun EasyTax Anda untuk pengalaman yang lebih personal.",
+    },
+  ];
+};
 
 export default function Settings() {
   return (

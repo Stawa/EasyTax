@@ -91,7 +91,7 @@ const calculateDailyTax = (ptkpValue: string, nominal: string): number => {
     return 0;
   }
 
-  const dailyPTKP = selectedPTKPOption.amount / 360;
+  const dailyPTKP = selectedPTKPOption.amount / 360; // Sesuai PMK 252/PMK.03/2008
   const numericNominal = Number(nominal.replace(/,/g, ""));
 
   if (numericNominal <= dailyPTKP) {
@@ -130,6 +130,7 @@ export default function Calculator() {
   const [showInfo, setShowInfo] = useState(false);
   const [selectedSumberDana, setSelectedSumberDana] = useState("all");
   const [showPTKPModal, setShowPTKPModal] = useState(false);
+  const [showPTKPInfo, setShowPTKPInfo] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -256,8 +257,8 @@ export default function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 2xl:px-16 py-6 sm:py-12 lg:py-16 2xl:py-24">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 2xl:px-16 py-6 sm:py-12 lg:py-16 2xl:py-24 flex-grow">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -280,157 +281,205 @@ export default function Calculator() {
           className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8"
         >
           {!showResults && (
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                {!showTable && (
+            <>
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                  {!showTable && (
+                    <div>
+                      <label
+                        htmlFor="ptkp"
+                        className="block text-sm font-medium text-gray-700 mb-1"
+                      >
+                        PTKP (Penghasilan Tidak Kena Pajak){" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        id="ptkp"
+                        name="ptkp"
+                        value={formData.ptkp}
+                        onChange={handleChange}
+                        required
+                        className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                      >
+                        <option value="">Pilih PTKP</option>
+                        {ptkpOptions.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
                   <div>
                     <label
-                      htmlFor="ptkp"
+                      htmlFor="sumberDana"
                       className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                      PTKP (Penghasilan Tidak Kena Pajak){" "}
-                      <span className="text-red-500">*</span>
+                      Sumber Dana <span className="text-red-500">*</span>
                     </label>
                     <select
-                      id="ptkp"
-                      name="ptkp"
-                      value={formData.ptkp}
+                      id="sumberDana"
+                      name="sumberDana"
+                      value={formData.sumberDana}
                       onChange={handleChange}
                       required
                       className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                     >
-                      <option value="">Pilih PTKP</option>
-                      {ptkpOptions.map((option) => (
+                      <option value="">Pilih Sumber Dana</option>
+                      {sumberDanaOptions.slice(1).map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
                       ))}
                     </select>
                   </div>
-                )}
 
-                <div>
-                  <label
-                    htmlFor="sumberDana"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Sumber Dana <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    id="sumberDana"
-                    name="sumberDana"
-                    value={formData.sumberDana}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
-                  >
-                    <option value="">Pilih Sumber Dana</option>
-                    {sumberDanaOptions.slice(1).map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  <div>
+                    <label
+                      htmlFor="tanggal"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Tanggal <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      id="tanggal"
+                      name="tanggal"
+                      value={formData.tanggal}
+                      onChange={handleChange}
+                      required
+                      min={`2000-01-01`}
+                      max={`${new Date().getFullYear()}-12-31`}
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="nominal"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Nominal <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="nominal"
+                      name="nominal"
+                      value={formData.nominal}
+                      onChange={handleChange}
+                      required
+                      placeholder="Masukkan nominal"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="keterangan"
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                    >
+                      Keterangan Hasil <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="keterangan"
+                      name="keterangan"
+                      value={formData.keterangan}
+                      onChange={handleChange}
+                      required
+                      placeholder="Masukkan keterangan"
+                      className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label
-                    htmlFor="tanggal"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                <div className="pt-4 flex flex-wrap gap-3 sm:gap-4 justify-end">
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.02 }}
+                    type="submit"
+                    className="w-full sm:w-fit bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
                   >
-                    Tanggal <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="date"
-                    id="tanggal"
-                    name="tanggal"
-                    value={formData.tanggal}
-                    onChange={handleChange}
-                    required
-                    min={`2000-01-01`}
-                    max={`${new Date().getFullYear()}-12-31`}
-                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
-                  />
+                    {editingId !== null ? (
+                      <>
+                        <FaCheck className="w-4 h-4" />
+                        Perbarui
+                      </>
+                    ) : records.length > 0 ? (
+                      <>
+                        <FaEdit className="w-4 h-4" />
+                        Tambahkan
+                      </>
+                    ) : (
+                      <>
+                        <FaCalculator className="w-4 h-4" />
+                        Buat Tabel
+                      </>
+                    )}
+                  </motion.button>
+                  {records.length > 0 && !editingId && (
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.02 }}
+                      type="button"
+                      onClick={handleSave}
+                      className="w-full sm:w-fit bg-gradient-to-r from-green-600 to-green-700 text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-xl font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
+                    >
+                      <FaSave className="w-4 h-4" />
+                      Simpan
+                    </motion.button>
+                  )}
+                  {editingId !== null && (
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      whileHover={{ scale: 1.02 }}
+                      type="button"
+                      onClick={handleCancel}
+                      className="w-full sm:w-fit bg-gradient-to-r from-red-500 to-red-600 text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
+                    >
+                      <FaTimes className="w-4 h-4" />
+                      Batal
+                    </motion.button>
+                  )}
                 </div>
-
-                <div>
-                  <label
-                    htmlFor="nominal"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Nominal <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="nominal"
-                    name="nominal"
-                    value={formData.nominal}
-                    onChange={handleChange}
-                    required
-                    placeholder="Masukkan nominal"
-                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="keterangan"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Keterangan Hasil <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="keterangan"
-                    name="keterangan"
-                    value={formData.keterangan}
-                    onChange={handleChange}
-                    required
-                    placeholder="Masukkan keterangan"
-                    className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-4 flex flex-wrap gap-3 sm:gap-4 justify-end">
+              </form>
+              <div className="relative">
                 <motion.button
-                  whileTap={{ scale: 0.95 }}
                   whileHover={{ scale: 1.02 }}
-                  type="submit"
-                  className="w-full sm:w-fit bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
-                >
-                  {editingId !== null
-                    ? "Perbarui"
-                    : records.length > 0
-                      ? "Tambahkan"
-                      : "Buat Tabel"}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowPTKPInfo(!showPTKPInfo)} 
+                  className="mt-4 ml-auto w-full sm:w-fit bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 py-2.5 sm:py-3 px-6 sm:px-8 rounded-xl font-semibold hover:from-gray-200 hover:to-gray-300 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base border border-gray-300"                >
+                  <FaQuestionCircle className="w-4 h-4" />
+                  Info PTKP
                 </motion.button>
-                {records.length > 0 && !editingId && (
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    whileHover={{ scale: 1.02 }}
-                    type="button"
-                    onClick={handleSave}
-                    className="w-full sm:w-fit bg-gradient-to-r from-green-600 to-green-700 text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-xl font-semibold hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
+                {showPTKPInfo && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="fixed sm:absolute inset-x-4 sm:inset-x-auto bottom-20 sm:bottom-full sm:right-0 sm:left-auto max-w-[90vw] sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl sm:mb-2 bg-white p-4 sm:p-6 rounded-xl shadow-xl border border-gray-200 text-sm sm:text-base text-gray-700 z-50"
                   >
-                    <FaSave className="w-4 h-4" />
-                    Simpan
-                  </motion.button>
-                )}
-                {editingId !== null && (
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    whileHover={{ scale: 1.02 }}
-                    type="button"
-                    onClick={handleCancel}
-                    className="w-full sm:w-fit bg-gradient-to-r from-red-500 to-red-600 text-white py-2.5 sm:py-3 px-6 sm:px-8 rounded-xl font-semibold hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
-                  >
-                    <FaTimes className="w-4 h-4" />
-                    Batal
-                  </motion.button>
+                    <div className="relative">
+                      <button
+                        onClick={() => setShowPTKPInfo(false)}
+                        className="absolute -top-2 -right-2 p-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                      >
+                        <FaTimes className="w-4 h-4" />
+                      </button>
+                      <h4 className="font-semibold text-gray-900 mb-2 text-base sm:text-lg">Informasi PTKP</h4>
+                      <p className="leading-relaxed text-sm sm:text-base">
+                        Menurut Peraturan Menteri Keuangan Nomor 252/Pmk.03/2008 Tentang
+                        Petunjuk Pelaksanaan Pemotongan Pajak Atas Penghasilan Sehubungan
+                        Dengan Pekerjaan, Jasa, Dan Kegiatan Orang Pribadi. Bahwa PTKP sehari
+                        sebagai dasar untuk menetapkan PTKP yang sebenarnya adalah sebesar PTKP
+                        dibagi 360 (tiga ratus enam puluh) hari
+                      </p>
+                    </div>
+                  </motion.div>
                 )}
               </div>
-            </form>
+            </>
           )}
 
           {showResults && savedRecords.length > 0 && (
